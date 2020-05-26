@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_color"
+    tools:context=".Views.Menu">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/barMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:onClick="activateNum"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_barmenu" />
+
+        <ImageButton
+            android:id="@+id/btnChat"
+            android:layout_width="56dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="4"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="activateNum"
+            app:srcCompat="@drawable/ic_communications" />
+
+        <ImageButton
+            android:id="@+id/btnUsers"
+            android:layout_width="56dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="4"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnChat"
+            android:onClick="activateNum"
+            app:srcCompat="@drawable/ic_users" />
+
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="70dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="4"
+            android:background="@android:color/transparent"
+            android:onClick="activateNum"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_home" />
+
+        <ImageButton
+            android:id="@+id/btnPlubication"
+            android:layout_width="56dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="4"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnProfile"
+            android:onClick="activateNum"
+            app:srcCompat="@drawable/ic_plus" />
+
+        <ImageButton
+            android:id="@+id/btnProfile"
+            android:layout_width="56dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="4"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="activateNum"
+            app:srcCompat="@drawable/ic_profile" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

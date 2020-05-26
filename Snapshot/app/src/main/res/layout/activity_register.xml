@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_color"
+    android:layout_height="match_parent"
+    tools:context=".Views.MainActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            app:srcCompat="@mipmap/logo_snapshot" />
+
+        <EditText
+            android:id="@+id/loginNick"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#F6F6F6"
+            android:ems="10"
+            android:hint="@string/Nombre_completo"
+            android:inputType="textPersonName"
+            android:textColor="#F6F6F6"
+            android:textColorHint="#F6F6F6" />
+
+        <EditText
+            android:id="@+id/nick"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#F6F6F6"
+            android:ems="10"
+            android:hint="@string/userID"
+            android:inputType="textPersonName"
+            android:textColor="#F6F6F6"
+            android:textColorHint="#F6F6F6" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#F6F6F6"
+            android:ems="10"
+            android:hint="@string/Contraseña"
+            android:inputType="textPassword"
+            android:textColor="#F6F6F6"
+            android:textColorHint="#F6F6F6" />
+
+        <EditText
+            android:id="@+id/mail"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#F6F6F6"
+            android:ems="10"
+            android:hint="@string/Mail"
+            android:inputType="textPersonName"
+            android:textColor="#F6F6F6"
+            android:textColorHint="#F6F6F6" />
+
+        <Button
+            android:id="@+id/signUp"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:background="#00A4D3"
+            android:text="@string/Regístrate"
+            android:textColor="#FDFDFD" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/t_siCuenta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/siCuenta"
+                android:textColor="#F6F6F6" />
+
+            <TextView
+                android:id="@+id/t_signIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/iniciarSesion"
+                android:textColor="#8B51F5" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SNAPSHOT</string>
+    <string name="Nombre_completo">Full name</string>
+    <string name="userID">ID user</string>
+    <string name="Mail">Mail</string>
+    <string name="Contraseña">Password</string>
+    <string name="Regístrate">Sign up</string>
+    <string name="siCuenta">Have an account?</string>
+    <string name="iniciarSesion">Log in</string>
+    <string name="usuarios">Users</string>
+    <string name="BtnSeguirUsuari">Follow</string>
+    <string name="editarUsuario">Edit user</string>
+    <string name="guardar">Save</string>
+    <string name="seleccionarUsuario">Select a user to follow him</string>
+</resources>

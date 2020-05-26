@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">SNAPSHOT</string>
+    <string name="Nombre_completo">Nombre completo</string>
+    <string name="userID">ID usuario</string>
+    <string name="Mail">Correo</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="Regístrate">Regístrate</string>
+    <string name="siCuenta">¿Tienes una cuenta?</string>
+    <string name="iniciarSesion">Iniciar sesión</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="usuarios">Usuarios</string>
+    <string name="BtnSeguirUsuari">Seguir</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="editarUsuario">Editar usuario</string>
+    <string name="guardar">Guardar</string>
+    <string name="seleccionarUsuario">Selecciona un usuario para seguirle</string>
+</resources>
