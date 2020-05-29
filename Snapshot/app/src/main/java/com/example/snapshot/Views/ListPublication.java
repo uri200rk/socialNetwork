@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.snapshot.Adapter.PublicationAdapter;
 import com.example.snapshot.Clases.Publication;
@@ -26,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ListPublication extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
@@ -64,7 +68,7 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
 
     private void loadWebService() {
 
-        String url = "http://192.168.1.16/webService/consulta_publicaciones.php";
+        String url = "http://uri200rk.alwaysdata.net/webService/consulta_publicaciones.php";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null,this,this);
         request.add(jsonObjectRequest);
@@ -107,10 +111,6 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
         }
 
     }
-
-
-
-
 
 
 

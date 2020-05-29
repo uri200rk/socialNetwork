@@ -68,7 +68,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateEmail() == true) {
-                    ejecutarSerivcio("http://192.168.1.16:80/webService/insertar_usuario.php");
+                    ejecutarSerivcio("http://uri200rk.alwaysdata.net:80/webService/insertar_usuario.php");
                 }
             }
         });

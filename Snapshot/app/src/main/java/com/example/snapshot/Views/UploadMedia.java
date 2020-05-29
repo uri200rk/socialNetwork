@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -50,7 +52,7 @@ public class UploadMedia extends AppCompatActivity {
 
     Bitmap bitmap;
     int PICK_IMAGE_REQUEST = 1;
-    String UPLOAD_URL = "http://192.168.1.16/webService/upload.php";
+    String UPLOAD_URL = "http://uri200rk.alwaysdata.net/webService/upload.php";
 
     String KEY_IMAGE = "foto";
     String KEY_NOMBRE = "nombre";
@@ -87,7 +89,7 @@ public class UploadMedia extends AppCompatActivity {
         imagen = findViewById(R.id.imagen);
         titulo = findViewById(R.id.titulo);
         btnSubir = findViewById(R.id.btnSubir);
-        btnInicio = findViewById(R.id.btnChat);
+        btnInicio = findViewById(R.id.btnInicio);
         descripcion = findViewById(R.id.descripcion);
 
 
@@ -97,7 +99,7 @@ public class UploadMedia extends AppCompatActivity {
         //BOTONES
 
         //accion boton inicio
-/*
+
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,25 +108,38 @@ public class UploadMedia extends AppCompatActivity {
             }
         });
 
-*/
+
         //accion boton subir
 
         btnSubir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ejecutarSerivcio("http://192.168.1.16:80/webService/insertar_publicacion.php", userLogged);
+                ejecutarSerivcio("http://uri200rk.alwaysdata.net:80/webService/insertar_publicacion.php", userLogged);
 
                 uploadImagen();
 
-                //volver a la pantalla inicial
-                Intent intent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(intent);
+                goHome(1000);
+
             }
         });
+
+
 
     }
 
     //METODOS
+
+    //volver activity home
+    public void goHome (int milisegundos) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(intent);
+            }
+        }, milisegundos);
+    }
 
     //convierte la imagen en un string
     public String getStringImagen(Bitmap bmp){

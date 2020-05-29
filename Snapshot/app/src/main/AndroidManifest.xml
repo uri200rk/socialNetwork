@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Views.Menu" />
+        <activity android:name=".Views.Menu"
+            android:windowSoftInputMode="adjustPan|adjustResize"
+
+            />
 
         <activity android:name=".Views.UploadMedia">
             <intent-filter>

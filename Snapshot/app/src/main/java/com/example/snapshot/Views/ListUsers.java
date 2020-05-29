@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -45,6 +47,8 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
+    EditText buscador;
+
 
 
     //configurations with inflate fragment
@@ -54,14 +58,14 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
     }
 
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
 
 
-
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
+
         View view = inflater.inflate(R.layout.fragment_list_users, container, false);
 
         listUsers = new ArrayList<>();
@@ -72,6 +76,7 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
         request = Volley.newRequestQueue(getContext());
 
+        buscador = (EditText) getActivity().findViewById(R.id.edtBuscador);
 
 
 
@@ -82,7 +87,7 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     private void loadWebService() {
 
-        String url = "http://192.168.1.16/webService/consultar_lista_usuario.php";
+        String url = "http://uri200rk.alwaysdata.net/webService/consultar_lista_usuario.php";
         Log.i("e", url);
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null,this,this);
@@ -119,9 +124,16 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
                 JSONObject jsonObject = null;
                 jsonObject = json.getJSONObject(i);
 
-                if (!jsonObject.optString("idUser").equals(Integer.toString(userLogged.getIdUser()))){
-                    Log.i("epa", Integer.toString(userLogged.getIdUser()) + "-------------------------------------------------------");
-                    listUsers.add(new User (jsonObject.optString("nick")));
+                if (!jsonObject.optString("idUser").equals(Integer.toString(userLogged.getIdUser()))){  //todos los registros menos el propio
+                   // Toast.makeText(getActivity(), "entrooo" + buscador.getText().toString(), Toast.LENGTH_SHORT).show();
+
+/*
+                    if (buscador.getText().toString().isEmpty()) {
+                        Toast.makeText(getActivity(), "entrooo" + buscador.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+ */
+                    listUsers.add(new User (jsonObject.optString("nick"), jsonObject.optInt("idUser")));
 
                 }
 
@@ -147,8 +159,8 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
                                     Toast.makeText(getActivity(),
                                             "Acceptado:" ,
                                             Toast.LENGTH_SHORT).show();
-                                    String userFollowing = listUsers.get(recyclerUsers.getChildAdapterPosition(v)).getNick();
-                                    String url = "http://192.168.1.16/webService/insertar_follow.php";
+                                    int userFollowing = listUsers.get(recyclerUsers.getChildAdapterPosition(v)).getIdUser();
+                                    String url = "http://uri200rk.alwaysdata.net/webService/insertar_follow.php";
                                     ejecutarSerivcio(url, userFollowing, userLogged);
 
 
@@ -181,7 +193,7 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     //metodos
 
-    private void ejecutarSerivcio(String URL, final String userFollowing, final User userLogged){
+    private void ejecutarSerivcio(String URL, final int userFollowing, final User userLogged){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -200,7 +212,7 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
                 Map<String, String> parametros=new HashMap<String, String>();
                 parametros.put("idUser", Integer.toString(userLogged.getIdUser()));
-                parametros.put("following",userFollowing);
+                parametros.put("following",Integer.toString(userFollowing));
 
 
 

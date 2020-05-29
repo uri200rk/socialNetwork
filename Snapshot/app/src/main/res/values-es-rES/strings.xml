@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SNAPSHOT</string>
+    <string name="app_name">Snapshot</string>
     <string name="Nombre_completo">Nombre completo</string>
     <string name="userID">ID usuario</string>
     <string name="Mail">Correo</string>
@@ -13,4 +13,5 @@
     <string name="editarUsuario">Editar usuario</string>
     <string name="guardar">Guardar</string>
     <string name="seleccionarUsuario">Selecciona a un usuario para seguirle</string>
+    <string name="publicaciones">Publicaciones</string>
 </resources>

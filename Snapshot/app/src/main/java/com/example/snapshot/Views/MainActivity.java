@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         HttpURLConnection conection = null;
         String respuesta = "";
         try {
-            URL url = new URL("http://192.168.1.16:80/webService/validar_usuario.php");
+            URL url = new URL("http://uri200rk.alwaysdata.net:80/webService/validar_usuario.php");
             conection = (HttpURLConnection)url.openConnection();
             conection.setRequestMethod("POST");
             conection.setRequestProperty("Content-Lenght",""+Integer.toString(parametros.getBytes().length));
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
 
     private void loadWebService() {
 
-        String url = "http://192.168.1.16/webService/uploadUserReggistered.php?nick="+edtUser.getText();
+        String url = "http://uri200rk.alwaysdata.net/webService/uploadUserReggistered.php?nick="+edtUser.getText();
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null,this,this);
         request.add(jsonObjectRequest);

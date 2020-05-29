@@ -16,8 +16,9 @@ public class User {
     }
 
     //second constructor
-    public User( String nick) {
+    public User( String nick , int idUser) {
         this.nick = nick;
+        this.idUser = idUser;
     }
 
 

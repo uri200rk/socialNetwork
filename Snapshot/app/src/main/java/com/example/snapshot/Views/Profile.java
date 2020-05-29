@@ -5,46 +5,63 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.snapshot.Adapter.FollowAdapter;
+import com.example.snapshot.Adapter.PublicationAdapter;
+import com.example.snapshot.Clases.Follow;
+import com.example.snapshot.Clases.Publication;
 import com.example.snapshot.Clases.User;
 import com.example.snapshot.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.Inflater;
 
 
-public class Profile extends Fragment {
+public class Profile extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     //varibales
 
     EditText nick, fullName, mail;
     Button btnEditUser, btnSave, btnDelete;
+    ImageButton btnGallery, btnFollowers;
 
+    //upload publications variables
+    JsonObjectRequest jsonObjectRequest;
+    RequestQueue request;
+    ArrayList<Publication> listPublications;
+    ArrayList<Follow> listFollow;
+    RecyclerView recycler_Pub_User;
+
+
+
+    Boolean mostrarList = false;
 
 
     //configurations with inflate fragment
@@ -60,6 +77,19 @@ public class Profile extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        //upload publications
+
+        listPublications = new ArrayList<>();
+        listFollow = new ArrayList<>();
+
+        recycler_Pub_User = (RecyclerView) view.findViewById(R.id.recycler_Pub_User);
+        recycler_Pub_User.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recycler_Pub_User.setHasFixedSize(true);
+
+        request = Volley.newRequestQueue(getContext());
+
+        uploadPublications();
 
         //get user logged
         MainActivity mainActivity = new MainActivity();
@@ -87,9 +117,9 @@ public class Profile extends Fragment {
         btnEditUser = (Button) view.findViewById(R.id.btnEditUser);
         btnSave = (Button) view.findViewById(R.id.btnSave);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
-
-
         btnSave.setVisibility(View.INVISIBLE);
+        btnGallery = (ImageButton) view.findViewById(R.id.btnGallery);
+        btnFollowers = (ImageButton) view.findViewById(R.id.btnFollowers);
 
 
         //declare listeners buttons
@@ -124,7 +154,7 @@ public class Profile extends Fragment {
             public void onClick(View v) {
 
 
-                ejecutarSerivcioUpdate("http://192.168.1.16:80/webService/update_user.php", userLogged);
+                ejecutarSerivcioUpdate("http://uri200rk.alwaysdata.net:80/webService/update_user.php", userLogged);
 
                 nick.setEnabled(false);
                 fullName.setEnabled(false);
@@ -153,7 +183,7 @@ public class Profile extends Fragment {
                         .setPositiveButton("si", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ejecutarSerivcioDelete("http://192.168.1.16:80/webService/delete_user.php", userLogged);
+                                ejecutarSerivcioDelete("http://uri200rk.alwaysdata.net:80/webService/delete_user.php", userLogged);
 
                                 //ir a pantalla login
                                 Intent i=new Intent(getActivity(), MainActivity.class);
@@ -172,6 +202,20 @@ public class Profile extends Fragment {
                 titulo.setTitle("ELIMINAR");
                 titulo.show();
 
+            }
+        });
+
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadPublications();
+            }
+        });
+
+        btnFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadFollowers();
             }
         });
 
@@ -246,6 +290,119 @@ public class Profile extends Fragment {
         RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
+    }
+
+    //mostrar publicaciones propias
+
+    private void uploadPublications() {
+        mostrarList = false;
+
+        //get user logged
+        MainActivity mainActivity = new MainActivity();
+        final User userLogged = mainActivity.getUser();
+        //fin get user logged
+
+        String url = "http://uri200rk.alwaysdata.net/webService/consulta_publicaciones.php";
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null,this,this);
+        request.add(jsonObjectRequest);
+    }
+
+    //mostrar followers
+
+    private void uploadFollowers() {
+        mostrarList = true;
+
+        //get user logged
+        MainActivity mainActivity = new MainActivity();
+        final User userLogged = mainActivity.getUser();
+        //fin get user logged
+
+        String url = "http://uri200rk.alwaysdata.net/webService/consulta_lista_follow.php";
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null,this,this);
+        request.add(jsonObjectRequest);
+    }
+
+
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+        Toast.makeText(getContext(), "error al conectar" + error.toString(), Toast.LENGTH_LONG).show();
+        System.out.println();
+        Log.d("ERROR: ", error.toString());
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        //get user logged
+        MainActivity mainActivity = new MainActivity();
+        final User userLogged = mainActivity.getUser();
+        //fin get user logged
+
+        //vaciamos arrayList
+        listPublications.clear();
+
+        //caso de querer ver tus publicaciones
+        if (!mostrarList) {
+            JSONArray json = response.optJSONArray("publication");
+
+            try {
+
+                for (int i = 0; i < json.length(); i++) {
+
+
+                    JSONObject jsonObject = null;
+                    jsonObject = json.getJSONObject(i);
+
+                    if (jsonObject.optString("nick").equals(userLogged.getNick())) {
+                        listPublications.add(new Publication(jsonObject.optInt("idPublication"), jsonObject.optInt("idUser"), jsonObject.optString("nick"), jsonObject.optInt("likes"), jsonObject.optString("title"),
+                                jsonObject.optString("description"), jsonObject.optString("idMedia"), jsonObject.optString("date")));
+
+                    }
+                }
+
+                PublicationAdapter adapter = new PublicationAdapter(listPublications, getContext());
+                recycler_Pub_User.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "No se ha podido establecer conexion con el servidor" + response, Toast.LENGTH_LONG).show();
+            }
+        }else if (mostrarList){  //caso ver lista followings
+
+            listFollow.clear();
+
+            JSONArray json = response.optJSONArray("follow");
+
+            try {
+
+                for (int i = 0; i < json.length(); i++) {
+
+
+                    JSONObject jsonObject = null;
+                    jsonObject = json.getJSONObject(i);
+
+                    if (jsonObject.optString("idUser").equals(Integer.toString(userLogged.getIdUser()))) {
+                        listFollow.add(new Follow (jsonObject.optInt("idUser"), jsonObject.optInt("following"), jsonObject.optInt("idFollow") ));
+
+                    }
+
+
+
+                }
+
+                FollowAdapter adapter = new FollowAdapter((listFollow));
+                recycler_Pub_User.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "No se ha podido establecer conexion con el servidor" + response, Toast.LENGTH_LONG).show();
+            }
+
+        }
     }
 
 
