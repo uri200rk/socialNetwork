@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:text="nombre"
-                    android:textAllCaps="true"
+                    android:textAllCaps="false"
                     android:textColor="#EBEBEB"
                     android:textSize="30sp" />
 
@@ -120,22 +120,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/descriptionUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Description"
-            android:textColor="#EBEBEB" />
     </LinearLayout>
 
 
     <View
         android:id="@+id/view3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="260dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="90dp"
         android:alpha="0.5"
         android:background="#ebebeb"
@@ -143,8 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.529" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDelete" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_Pub_User"
@@ -161,12 +152,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="391dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="1dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDelete">
 
@@ -175,7 +163,7 @@
             android:layout_width="56dp"
             android:layout_height="36dp"
             android:layout_weight="4"
-            android:background="@android:color/transparent"
+            android:background="#7CEBEBEB"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

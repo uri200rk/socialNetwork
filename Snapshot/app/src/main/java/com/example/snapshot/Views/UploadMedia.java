@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -38,27 +37,29 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class UploadMedia extends AppCompatActivity {
+
+    //--- Declarations of elements ---
+
     //get a date and hours
     Calendar c = Calendar.getInstance();
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HHmmss");
     String formattedDate = df.format(c.getTime());
 
-    //DECLARACION DE ELEMENTOS
 
     Button btnSubir;
     ImageButton btnInicio;
     ImageView imagen;
     EditText titulo, descripcion;
 
+    //upload image
     Bitmap bitmap;
     int PICK_IMAGE_REQUEST = 1;
     String UPLOAD_URL = "http://uri200rk.alwaysdata.net/webService/upload.php";
-
     String KEY_IMAGE = "foto";
     String KEY_NOMBRE = "nombre";
 
 
-    //configuration with change fragments
+    //--- Configurations for inflate fragment ---
 
     public static UploadMedia newInstance(){
         return new UploadMedia();
@@ -71,20 +72,20 @@ public class UploadMedia extends AppCompatActivity {
         return view;
     }
 
+    //--- End configurations for inflate fragment ---
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_media);
 
-
+        //--- initialize elements ---
 
         //get user logged
         MainActivity mainActivity = new MainActivity();
         final User userLogged = mainActivity.getUser();
         //fin get user logged
 
-        //INICIALIZACION DE ELEMENTOS
 
         imagen = findViewById(R.id.imagen);
         titulo = findViewById(R.id.titulo);
@@ -93,13 +94,12 @@ public class UploadMedia extends AppCompatActivity {
         descripcion = findViewById(R.id.descripcion);
 
 
-        //elejir imagen
+        //call method choose image
         showFileChooser();
 
-        //BOTONES
+        //--- Declare listeners buttons ---
 
-        //accion boton inicio
-
+        //btn go main activity
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +109,7 @@ public class UploadMedia extends AppCompatActivity {
         });
 
 
-        //accion boton subir
+        //btn upload image
 
         btnSubir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,13 +123,15 @@ public class UploadMedia extends AppCompatActivity {
             }
         });
 
+        //--- End declare listeners buttons ---
+
 
 
     }
 
-    //METODOS
+    //--- Methods ---
 
-    //volver activity home
+    //go activity home
     public void goHome (int milisegundos) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -141,7 +143,7 @@ public class UploadMedia extends AppCompatActivity {
         }, milisegundos);
     }
 
-    //convierte la imagen en un string
+    //converts the image to a string
     public String getStringImagen(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100,baos);
@@ -151,9 +153,9 @@ public class UploadMedia extends AppCompatActivity {
         return encodedImagen;
     }
 
-    //subir imagen
+    //upload image on webServer
     public void uploadImagen() {
-        final ProgressDialog cargando = ProgressDialog.show(this,"subiendo...","Espere por favor");
+        final ProgressDialog cargando = ProgressDialog.show(this,getString(R.string.upload),getString(R.string.esperePorfavor));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -164,7 +166,7 @@ public class UploadMedia extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 cargando.dismiss();
-                Toast.makeText(UploadMedia.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(UploadMedia.this, getString(R.string.errorConectar), Toast.LENGTH_LONG).show();
 
             }
         }){
@@ -190,7 +192,7 @@ public class UploadMedia extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Selecciona una imagen"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent,getString(R.string.selecionarImagen)), PICK_IMAGE_REQUEST);
     }
 
     @Override
@@ -201,9 +203,7 @@ public class UploadMedia extends AppCompatActivity {
             Uri filePath = data.getData();
 
             try {
-                //como obtener el mapa de los bits de la galeria
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                //configuracion del mapa de bits en ImageView
                 imagen.setImageBitmap(bitmap);
             }catch (IOException e){
                 e.printStackTrace();
@@ -211,13 +211,13 @@ public class UploadMedia extends AppCompatActivity {
         }
     }
 
-    //ejecutar sentencia sql
+    //execute sql sentence
     private void ejecutarSerivcio(String URL, final User user){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "OPERACION EXITOSA", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.operacionExitosa), Toast.LENGTH_SHORT).show();
             }
 
         }, new Response.ErrorListener() {
@@ -231,7 +231,6 @@ public class UploadMedia extends AppCompatActivity {
 
 
                 Map<String, String > parametros=new HashMap<String, String>();
-                Log.i(user.getFullName(),"mensaje--------------------------------------------------------------------------------------------" + user.getNick());
                 parametros.put("idUser", Integer.toString(user.getIdUser()));
                 parametros.put("nick", user.getNick());
                 parametros.put("title",titulo.getText().toString());
@@ -249,5 +248,7 @@ public class UploadMedia extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+
+    //--- End methods ---
 
 }

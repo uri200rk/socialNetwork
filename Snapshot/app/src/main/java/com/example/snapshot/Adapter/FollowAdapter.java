@@ -4,22 +4,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.snapshot.Clases.Follow;
 import com.example.snapshot.R;
-
 import java.util.List;
 
-public class FollowAdapter
-        extends RecyclerView.Adapter<FollowAdapter.FollowHolder>
-        implements View.OnClickListener{
+public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowHolder> implements View.OnClickListener{
+
+    //--- Declarations of elements ---
 
     List<Follow> listFollow;
     private View.OnClickListener listener;
 
+    //adapter constructor
     public FollowAdapter(List<Follow> listFollow){
         this.listFollow = listFollow;
     }
@@ -45,7 +43,7 @@ public class FollowAdapter
     @Override
     public void onBindViewHolder(@NonNull FollowHolder holder, int position) {
 
-        holder.idUser.setText(String.valueOf(listFollow.get(position).getIdUser()));
+        holder.nameFollowing.setText(String.valueOf(listFollow.get(position).getNameFollowing()));
 
 
     }
@@ -55,14 +53,15 @@ public class FollowAdapter
         return listFollow.size();
     }
 
+    //--- Declarations of elements holder ---
 
     public class FollowHolder extends RecyclerView.ViewHolder {
 
-        TextView idUser;
+        TextView nameFollowing;
 
         public FollowHolder(View vista) {
             super(vista);
-            idUser= (TextView) itemView.findViewById(R.id.edtNick);
+            nameFollowing= (TextView) itemView.findViewById(R.id.edtNick);
         }
     }
 }

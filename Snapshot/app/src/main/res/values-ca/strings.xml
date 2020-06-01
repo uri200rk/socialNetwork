@@ -14,4 +14,22 @@
     <string name="guardar">Guardar</string>
     <string name="seleccionarUsuario">Selecciona un usuari per seguir-lo</string>
     <string name="publicaciones">Publicacions</string>
+    <string name="errorConectar">Error al conectar</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
+    <string name="desearSeguir">Decideixes seguir a</string>
+    <string name="yaSigueUsuario">Ja segueixes a l\'usuari</string>
+    <string name="operacionExitosa">"operació reeixida "</string>
+    <string name="usuario_pass_incorrect">Usuari o contrasenya incorrecte</string>
+    <string name="nombreNoDisponible">Nom no disponible</string>
+    <string name="eliminacionCuenta">Vols eliminar el compte ?</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="campoObligatorio">Camp obligatori</string>
+    <string name="mailValido">Siusplau introdueix un correu vàlid</string>
+    <string name="noDisponible">No disponible a la beta</string>
+    <string name="sinDatos">Sense dades per a cargar</string>
+    <string name="upload">Pujant...</string>
+    <string name="esperePorfavor">Esperi siusplau...</string>
+    <string name="selecionarImagen">Selecciona una imatge</string>
+    <string name="dadoLike">Has donat m\'agrada a la publicació</string>
 </resources>

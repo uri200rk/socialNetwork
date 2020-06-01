@@ -14,12 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,19 +31,22 @@ import com.example.snapshot.Clases.Follow;
 import com.example.snapshot.Clases.Publication;
 import com.example.snapshot.Clases.User;
 import com.example.snapshot.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 
 public class Profile extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
-    //varibales
+    //--- Declarations of elements ---
+
 
     EditText nick, fullName, mail;
     Button btnEditUser, btnSave, btnDelete;
@@ -57,51 +57,59 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
     RequestQueue request;
     ArrayList<Publication> listPublications;
     ArrayList<Follow> listFollow;
-    RecyclerView recycler_Pub_User;
-
-
+    RecyclerView recyclerView;
 
     Boolean mostrarList = false;
 
 
-    //configurations with inflate fragment
+    //configurations for inflate fragment
     public static Profile newInstance(){
         return new Profile();
     }
 
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
-
     }
+
+    //--- End configurations for inflate fragment ---
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        //upload publications
+        //--- initialize elements ---
 
+        //ArrayLists
         listPublications = new ArrayList<>();
         listFollow = new ArrayList<>();
 
-        recycler_Pub_User = (RecyclerView) view.findViewById(R.id.recycler_Pub_User);
-        recycler_Pub_User.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recycler_Pub_User.setHasFixedSize(true);
-
-        request = Volley.newRequestQueue(getContext());
-
-        uploadPublications();
-
-        //get user logged
-        MainActivity mainActivity = new MainActivity();
-        final User userLogged = mainActivity.getUser();
-        //fin get user logged
+        //recycerView
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_Pub_User);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setHasFixedSize(true);
 
         //declare elements
         nick = (EditText) view.findViewById(R.id.edtNick);
         fullName = (EditText) view.findViewById(R.id.edtFullName);
         mail = (EditText) view.findViewById(R.id.edtMail);
 
-        //bloqued writed
+        //request
+        request = Volley.newRequestQueue(getContext());
+
+        //--- Fin initialize elements ---
+
+        //call method
+        loadPublications();
+
+        //get user logged
+        MainActivity mainActivity = new MainActivity();
+        final User userLogged = mainActivity.getUser();
+        //end get user logged
+
+
+        //bloqued writed user data
         nick.setEnabled(false);
         fullName.setEnabled(false);
         mail.setEnabled(false);
@@ -113,7 +121,6 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
 
         //declare buttons
-
         btnEditUser = (Button) view.findViewById(R.id.btnEditUser);
         btnSave = (Button) view.findViewById(R.id.btnSave);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
@@ -122,76 +129,101 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
         btnFollowers = (ImageButton) view.findViewById(R.id.btnFollowers);
 
 
-        //declare listeners buttons
+        //--- Declare listeners buttons ---
 
+        //btn edit user
         btnEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //permision for write in user data
                 nick.setEnabled(true);
                 fullName.setEnabled(true);
                 mail.setEnabled(true);
 
+                //control visibility butons
                 btnEditUser.setVisibility(View.INVISIBLE);
                 btnSave.setVisibility(View.VISIBLE);
 
-                //mostar que se puede editar
+                //set background color
                 nick.setBackgroundColor(Color.parseColor("#93E7FF"));
                 fullName.setBackgroundColor(Color.parseColor("#93E7FF"));
                 mail.setBackgroundColor(Color.parseColor("#93E7FF"));
 
+                //put cursor end word and requestFocus
                 nick.setSelection(nick.length());
                 nick.requestFocus();
-
-
-
 
             }
         });
 
+        //btn save
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //validacion existencia follow
 
-                ejecutarSerivcioUpdate("http://uri200rk.alwaysdata.net:80/webService/update_user.php", userLogged);
+                Thread tr=new Thread(){
+                    @Override
+                    public void run() {
+                        final String res=validateUser(nick.getText().toString());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int r=objJASON(res);
+                                if(r>0){        //case exist user name
+                                    Toast.makeText(getActivity(),R.string.nombreNoDisponible,Toast.LENGTH_SHORT).show();
+                                    nick.setText(userLogged.getNick());
+                                }else{          //case don't exist use name
+                                    updateUser("http://uri200rk.alwaysdata.net:80/webService/update_user.php", userLogged);
+                                    Intent i=new Intent(getActivity(), MainActivity.class);
+                                    startActivity(i);
 
+                                }
+                            }
+                        });
+                    }
+                };
+                tr.start(); //star process
+
+                //bloqued write user data
                 nick.setEnabled(false);
                 fullName.setEnabled(false);
                 mail.setEnabled(false);
 
+                //control visibility butons
                 btnEditUser.setVisibility(View.VISIBLE);
                 btnSave.setVisibility(View.INVISIBLE);
 
-                //volver a poner fondo vacio
+                //set background invisible
                 nick.setBackground(null);
                 fullName.setBackground(null);
                 mail.setBackground(null);
 
-
-
             }
         });
 
+        //btn delete
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
-                alerta.setMessage("Deseas eliminar la cuenta?")
+                alerta.setMessage(R.string.eliminacionCuenta)
                         .setCancelable(false)
-                        .setPositiveButton("si", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ejecutarSerivcioDelete("http://uri200rk.alwaysdata.net:80/webService/delete_user.php", userLogged);
+                                deleteUser("http://uri200rk.alwaysdata.net:80/webService/delete_user.php", userLogged);
 
-                                //ir a pantalla login
+                                //go activity login
                                 Intent i=new Intent(getActivity(), MainActivity.class);
                                 startActivity(i);
 
                             }
                         })
-                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
@@ -199,49 +231,59 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
                         });
 
                 AlertDialog titulo = alerta.create();
-                titulo.setTitle("ELIMINAR");
+                titulo.setTitle(R.string.eliminar);
                 titulo.show();
 
             }
         });
 
+        //btn see my gallery
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadPublications();
+
+                btnFollowers.setBackgroundColor(Color.TRANSPARENT);
+                btnGallery.setBackgroundColor(Color.parseColor("#73EBEBEB"));
+
+                //call method
+                loadPublications();
             }
         });
 
+        //btn see my followers
         btnFollowers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadFollowers();
+
+                btnFollowers.setBackgroundColor(Color.parseColor("#73EBEBEB"));
+                btnGallery.setBackgroundColor(Color.TRANSPARENT);
+
+                //call method
+                loadFollowers();
             }
         });
 
-
+        //--- End declare listeners buttons ---
 
         return view;
     }
 
 
-
-
-    //METODOS
+    //--- Methods ---
 
     //update user
-    private void ejecutarSerivcioUpdate(String URL, final User user){
+    private void updateUser(String URL, final User user){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getActivity(), "OPERACION EXITOSA", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.operacionExitosa, Toast.LENGTH_SHORT).show();
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),R.string.errorConectar,Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -263,18 +305,18 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
     }
 
     //delete user
-    private void ejecutarSerivcioDelete(String URL, final User user){
+    private void deleteUser(String URL, final User user){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getActivity(), "OPERACION EXITOSA", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.operacionExitosa, Toast.LENGTH_SHORT).show();
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),getString(R.string.errorConectar),Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -292,15 +334,9 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
     }
 
-    //mostrar publicaciones propias
-
-    private void uploadPublications() {
+    //show own posts
+    private void loadPublications() {
         mostrarList = false;
-
-        //get user logged
-        MainActivity mainActivity = new MainActivity();
-        final User userLogged = mainActivity.getUser();
-        //fin get user logged
 
         String url = "http://uri200rk.alwaysdata.net/webService/consulta_publicaciones.php";
 
@@ -308,15 +344,10 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
         request.add(jsonObjectRequest);
     }
 
-    //mostrar followers
+    //show own followers
 
-    private void uploadFollowers() {
+    private void loadFollowers() {
         mostrarList = true;
-
-        //get user logged
-        MainActivity mainActivity = new MainActivity();
-        final User userLogged = mainActivity.getUser();
-        //fin get user logged
 
         String url = "http://uri200rk.alwaysdata.net/webService/consulta_lista_follow.php";
 
@@ -329,8 +360,7 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
     @Override
     public void onErrorResponse(VolleyError error) {
 
-        Toast.makeText(getContext(), "error al conectar" + error.toString(), Toast.LENGTH_LONG).show();
-        System.out.println();
+        Toast.makeText(getContext(), getString(R.string.sinDatos), Toast.LENGTH_LONG).show();
         Log.d("ERROR: ", error.toString());
 
     }
@@ -342,10 +372,10 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
         final User userLogged = mainActivity.getUser();
         //fin get user logged
 
-        //vaciamos arrayList
+        //clear arrayList
         listPublications.clear();
 
-        //caso de querer ver tus publicaciones
+        //case see your publications
         if (!mostrarList) {
             JSONArray json = response.optJSONArray("publication");
 
@@ -362,17 +392,21 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
                                 jsonObject.optString("description"), jsonObject.optString("idMedia"), jsonObject.optString("date")));
 
                     }
+
                 }
 
                 PublicationAdapter adapter = new PublicationAdapter(listPublications, getContext());
-                recycler_Pub_User.setAdapter(adapter);
+                recyclerView.setAdapter(adapter);
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(getContext(), "No se ha podido establecer conexion con el servidor" + response, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.errorConectar), Toast.LENGTH_LONG).show();
             }
-        }else if (mostrarList){  //caso ver lista followings
 
+
+
+        }else if (mostrarList){  //case see your followings
+
+            //clar arrayList
             listFollow.clear();
 
             JSONArray json = response.optJSONArray("follow");
@@ -381,31 +415,68 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
                 for (int i = 0; i < json.length(); i++) {
 
-
                     JSONObject jsonObject = null;
                     jsonObject = json.getJSONObject(i);
 
-                    if (jsonObject.optString("idUser").equals(Integer.toString(userLogged.getIdUser()))) {
-                        listFollow.add(new Follow (jsonObject.optInt("idUser"), jsonObject.optInt("following"), jsonObject.optInt("idFollow") ));
+                    if (jsonObject.optInt("idUser") == userLogged.getIdUser()) {    //filter for your user
+
+                        listFollow.add(new Follow (jsonObject.optString("nick"), jsonObject.optInt("idUser")));
 
                     }
 
-
-
                 }
 
+                //load follows in recyclerView
                 FollowAdapter adapter = new FollowAdapter((listFollow));
-                recycler_Pub_User.setAdapter(adapter);
+                recyclerView.setAdapter(adapter);
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(getContext(), "No se ha podido establecer conexion con el servidor" + response, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.errorConectar), Toast.LENGTH_LONG).show();
             }
 
         }
     }
 
 
+    //Method verifies existence of edtUser
+    public String validateUser(String nick){
+        String parametros = "nick="+nick;
+        HttpURLConnection conection = null;
+        String respuesta = "";
+        try {
+            URL url = new URL("http://uri200rk.alwaysdata.net:80/webService/validar_edtUsuario.php");
+            conection = (HttpURLConnection)url.openConnection();
+            conection.setRequestMethod("POST");
+            conection.setRequestProperty("Content-Lenght",""+Integer.toString(parametros.getBytes().length));
 
+            conection.setDoOutput(true);
+            DataOutputStream wr= new DataOutputStream(conection.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
+
+            Scanner inStream=new Scanner(conection.getInputStream());
+
+            while (inStream.hasNextLine()){
+                respuesta+=(inStream.nextLine());
+            }
+
+        }catch (Exception e){}
+        return respuesta.toString();
+    }
+
+    public int objJASON(String respuesta){
+        int res=0;
+        try {
+            JSONArray json = new JSONArray(respuesta);
+            if(json.length() > 0){
+                res=1;
+            }
+
+        }catch (Exception e){}
+
+        return res;
+    }
+
+    //--- End methods ---
 
 }

@@ -9,10 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,21 +20,20 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.snapshot.Clases.Publication;
-import com.example.snapshot.Clases.User;
 import com.example.snapshot.R;
-import com.example.snapshot.Views.ListPublication;
-import com.example.snapshot.Views.MainActivity;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.PublicationHolder> implements View.OnClickListener {
 
+    //--- Declarations of elements ---
+
     List<Publication> listPublication;
     RequestQueue request;
     Context context;
 
+    //adapter constructor
     public PublicationAdapter(List<Publication> listPublication, Context context){
         this.listPublication = listPublication;
         this.context = context;
@@ -48,15 +45,12 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
     }
 
-
+    //--- Declarations of elements holder ---
     public class PublicationHolder extends RecyclerView.ViewHolder {
 
         TextView nickUser, title, description, likes;
         ImageView idMedia;
         ImageButton btnLike;
-
-
-
 
         public PublicationHolder(View itemView) {
 
@@ -68,8 +62,6 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
             likes= (TextView) itemView.findViewById(R.id.likes);
             idMedia= (ImageView) itemView.findViewById(R.id.idMedia);
 
-
-
         }
     }
 
@@ -77,11 +69,12 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
     @NonNull
     @Override
     public PublicationAdapter.PublicationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View vista= LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_list_publication,parent,false);
+
         RecyclerView.LayoutParams layoutParams=new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         vista.setLayoutParams(layoutParams);
-
 
 
         return new PublicationAdapter.PublicationHolder(vista);
@@ -120,7 +113,9 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
     }
 
+    //--- Methods ---
 
+    //method load image from web server
     private void loadImageWebService(String idMedia, final PublicationHolder holder) {
 
         String urlImage = "http://uri200rk.alwaysdata.net/webService/upload/" + idMedia + ".png";
@@ -136,7 +131,7 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.errorConectar, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -157,13 +152,13 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, "HAS DADO LIKE EN LA PUBLICACION", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.dadoLike, Toast.LENGTH_SHORT).show();
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context,error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,R.string.errorConectar,Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -181,4 +176,7 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         requestQueue.add(stringRequest);
 
     }
+
+    //--- End methods ---
+
 }

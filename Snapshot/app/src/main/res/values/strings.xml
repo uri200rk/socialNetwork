@@ -17,4 +17,22 @@
     <string name="guardar">Guardar</string>
     <string name="seleccionarUsuario">Selecciona un usuario para seguirle</string>
     <string name="publicaciones">Publicaciones</string>
+    <string name="errorConectar">Error al conectar</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
+    <string name="desearSeguir">Deseas seguir a</string>
+    <string name="yaSigueUsuario">Ya sigues al usuario</string>
+    <string name="operacionExitosa">Operacion exitosa</string>
+    <string name="usuario_pass_incorrect">Usuario o contraseña incorrecto</string>
+    <string name="nombreNoDisponible">Nombre no disponible</string>
+    <string name="eliminacionCuenta">Deseas eliminar la cuenta ?</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="campoObligatorio">Campo obligatorio</string>
+    <string name="mailValido">Porfavor introduce un correo válido</string>
+    <string name="noDisponible">No disponible en la beta</string>
+    <string name="sinDatos">Sin datos para cargar</string>
+    <string name="upload">Subiendo...</string>
+    <string name="esperePorfavor">Espere porfavor...</string>
+    <string name="selecionarImagen">Selecciona una imagen</string>
+    <string name="dadoLike">Has dado me gusta a la publicacion</string>
 </resources>

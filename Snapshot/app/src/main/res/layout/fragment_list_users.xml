@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="90dp"
         android:alpha="0.5"
         android:background="#ebebeb"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,10 +53,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="399dp"
-        android:layout_height="428dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="160dp"
+        android:layout_marginBottom="90dp"
         app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@+id/view2"
         app:layout_constraintHorizontal_bias="0.0"
@@ -70,6 +70,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/seleccionarUsuario"
         android:textColor="#00A4D3"
         android:textSize="18sp"
@@ -77,13 +78,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view2" />
 
-    <EditText
-        android:id="@+id/edtBuscador"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Buscador"
+    <SearchView
+        android:id="@+id/buscador"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />

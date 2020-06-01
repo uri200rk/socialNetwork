@@ -1,7 +1,6 @@
 package com.example.snapshot.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,38 +9,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.snapshot.Adapter.UsersAdapter;
 import com.example.snapshot.Clases.User;
 import com.example.snapshot.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
 
-    //DECLARACION DE ELEMENTOS
+    //--- Declarations of elements ---
     EditText edtUser, edtPassword;
     Button btnLogin;
     TextView t_signUp;
-
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+
+    //user object
     static User user;
 
 
@@ -51,40 +44,35 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //obtener usuario
-
         request = Volley.newRequestQueue(this);
 
-
-        //fin obtener usuario
-
-        //INICIALIZACION DE ELEMENTOS
+        //--- initialize elements ---
 
         edtUser = (EditText) findViewById(R.id.loginNick);
         edtPassword = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.signUp);
         t_signUp = (TextView) findViewById(R.id.t_signIn);
 
-        //BOTONES
+        //--- Buttons ---
 
-        //---boton login accion---
+        //Button login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Thread tr=new Thread(){
                     @Override
                     public void run() {
-                        final String res=validarUsuario(edtUser.getText().toString(), edtPassword.getText().toString());
-                        loadWebService();
+                        final String res=validateUser(edtUser.getText().toString(), edtPassword.getText().toString());
+                        getObjUser();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 int r=objJASON(res);
-                                if(r>0){
+                                if(r>0){     //case exist user
                                     Intent i=new Intent(getApplicationContext(), Menu.class);
                                     startActivity(i);
-                                }else{
-                                    Toast.makeText(getApplicationContext(),"Usuario o contraseña incorrecto",Toast.LENGTH_SHORT).show();
+                                }else{      //case error user or password
+                                    Toast.makeText(getApplicationContext(),R.string.usuario_pass_incorrect,Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -95,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         });
 
 
-        //--boton texto registrarse--
+        //Text buton register
         t_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,14 +92,12 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
             }
         });
 
-
-
     }
 
-    //METODOS
+    //--- Methods ---
 
-    //---Metodo comprueba datos---
-    public String validarUsuario(String user, String password){
+    //Method check dates
+    public String validateUser(String user, String password){
         String parametros = "nick="+user+"&password="+password;
         HttpURLConnection conection = null;
         String respuesta = "";
@@ -149,13 +135,12 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         return res;
     }
 
-    //---Fin comprueba datos---
+    //End check dates
 
 
-    //---Metodo obtenerObjUser---
+    //Method get object user
 
-
-    private void loadWebService() {
+    private void getObjUser() {
 
         String url = "http://uri200rk.alwaysdata.net/webService/uploadUserReggistered.php?nick="+edtUser.getText();
 
@@ -167,8 +152,6 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
     @Override
     public void onErrorResponse(VolleyError error) {
 
-        Toast.makeText(this, "error al conectar" + error.toString(), Toast.LENGTH_LONG).show();
-        System.out.println();
         Log.d("ERROR: ", error.toString());
 
     }
@@ -184,25 +167,24 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
                 JSONObject jsonObject = null;
                 jsonObject = json.getJSONObject(i);
 
-                //listUsers.add(new User (jsonObject.optString("nick")));
-              user = new User(jsonObject.optInt("idUser"),jsonObject.optString("fullName"),jsonObject.optString("nick"), jsonObject.optString("mail"), jsonObject.optString("password"));
+                //create object logged in current user
+                user = new User(jsonObject.optInt("idUser"),jsonObject.optString("fullName"),jsonObject.optString("nick"), jsonObject.optString("mail"), jsonObject.optString("password"));
             }
 
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(this, "No se ha podido establecer conexion con el servidor" + response, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.errorConectar, Toast.LENGTH_LONG).show();
         }
-
 
     }
 
 
-
+    //to get user object from another class
     public static User getUser(){
         return user;
     }
 
-    //--fin metodo obtener usuario logueado
+    //End method get user logged
 
 }

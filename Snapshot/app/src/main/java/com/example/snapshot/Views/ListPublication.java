@@ -1,24 +1,19 @@
 package com.example.snapshot.Views;
 
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.snapshot.Adapter.PublicationAdapter;
 import com.example.snapshot.Clases.Publication;
@@ -26,21 +21,19 @@ import com.example.snapshot.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class ListPublication extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
-    //declarations of elements
+    // --- Declarations of elements ---
 
     RecyclerView recyclerPublications;
     ArrayList<Publication> listPublications;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
+    //--- Configurations for inflate fragment ---
 
     public static ListPublication newInstance(){
         return new ListPublication();
@@ -50,22 +43,34 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
         super.onCreate(savedInstanceState);
     }
 
+    //--- End configuration for inflate fragment ---
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_list_publication, container, false);
+        //--- initialize elements ---
 
+        //arrayList publication
         listPublications = new ArrayList<>();
 
+        //recyclerView publications
         recyclerPublications = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerPublications.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerPublications.setHasFixedSize(true);
 
+        //request
         request = Volley.newRequestQueue(getContext());
 
+        //--- Fin initialize elements ---
+
+        //call method
         loadWebService();
 
         return view;
     }
 
+    //--- METHODS ---
+
+    //method for consult publications
     private void loadWebService() {
 
         String url = "http://uri200rk.alwaysdata.net/webService/consulta_publicaciones.php";
@@ -77,8 +82,7 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
     @Override
     public void onErrorResponse(VolleyError error) {
 
-        Toast.makeText(getContext(), "error al conectar" + error.toString(), Toast.LENGTH_LONG).show();
-        System.out.println();
+        Toast.makeText(getContext(), getString(R.string.sinDatos), Toast.LENGTH_LONG).show();
         Log.d("ERROR: ", error.toString());
 
     }
@@ -107,10 +111,12 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "No se ha podido establecer conexion con el servidor" + response, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.errorConectar), Toast.LENGTH_LONG).show();
         }
 
     }
+
+    //End method for consult publications
 
 
 

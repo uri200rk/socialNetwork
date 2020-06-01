@@ -14,4 +14,22 @@
     <string name="guardar">Save</string>
     <string name="seleccionarUsuario">Select a user to follow him</string>
     <string name="publicaciones">Publications</string>
+    <string name="errorConectar">Error connecting</string>
+    <string name="si">Yes</string>
+    <string name="no">Not</string>
+    <string name="desearSeguir">"You decide to follow "</string>
+    <string name="yaSigueUsuario">You already follow the user</string>
+    <string name="operacionExitosa">"Successful operation "</string>
+    <string name="usuario_pass_incorrect">Incorrect user or password</string>
+    <string name="nombreNoDisponible">"Name not available "</string>
+    <string name="eliminacionCuenta">Do you want to delete the account?</string>
+    <string name="eliminar">Delete</string>
+    <string name="campoObligatorio">Obligatori field</string>
+    <string name="mailValido">" Please enter a valid email"</string>
+    <string name="noDisponible">"Not available in beta "</string>
+    <string name="sinDatos">"No data to load "</string>
+    <string name="upload">Upload...</string>
+    <string name="esperePorfavor">"Please wait "</string>
+    <string name="selecionarImagen">"Select an image "</string>
+    <string name="dadoLike">" You have liked the publication"</string>
 </resources>
