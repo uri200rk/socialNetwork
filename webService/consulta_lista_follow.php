@@ -5,7 +5,7 @@ include 'conexion.php';
 
 $json=array();
 				
-		$consulta="select * from follow";
+		$consulta="select user.nick, follow.idUser from follow INNER JOIN user on follow.following = user.idUser";
 		$resultado=mysqli_query($conexion,$consulta);
 		
 		while($registro=mysqli_fetch_array($resultado)){
