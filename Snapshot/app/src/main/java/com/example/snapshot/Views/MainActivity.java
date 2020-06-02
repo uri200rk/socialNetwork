@@ -25,6 +25,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+/**
+ * The Main activity for the Application, is the first screen the users sees where could initial session
+ * @author oriol
+ * @version 1.0
+ */
 public class MainActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     //--- Declarations of elements ---
@@ -37,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
     //user object
     static User user;
 
-
-
+    /**
+     * initialize elements
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +103,12 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
 
     //--- Methods ---
 
-    //Method check dates
+    /**
+     * This is method check nick and password
+     * @param user nick
+     * @param password password
+     * @return answer user exists or not
+     */
     public String validateUser(String user, String password){
         String parametros = "nick="+user+"&password="+password;
         HttpURLConnection conection = null;
@@ -122,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         return respuesta.toString();
     }
 
+    /**
+     * Get answer validateUser
+     * @param respuesta
+     * @return number of users that exist
+     */
     public int objJASON(String respuesta){
         int res=0;
         try {
@@ -138,8 +155,9 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
     //End check dates
 
 
-    //Method get object user
-
+    /**
+     * Method get object user
+     */
     private void getObjUser() {
 
         String url = "http://uri200rk.alwaysdata.net/webService/uploadUserReggistered.php?nick="+edtUser.getText();
@@ -148,7 +166,10 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
         request.add(jsonObjectRequest);
     }
 
-
+    /**
+     * case of error searching data
+     * @param error
+     */
     @Override
     public void onErrorResponse(VolleyError error) {
 
@@ -156,6 +177,10 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
 
     }
 
+    /**
+     * fill arraylist of user records
+     * @param response
+     */
     @Override
     public void onResponse(JSONObject response) {
 
@@ -179,12 +204,12 @@ public class MainActivity extends AppCompatActivity implements Response.Listener
 
     }
 
-
-    //to get user object from another class
+    /**
+     * to get user object from another class
+     * @return user object
+     */
     public static User getUser(){
         return user;
     }
-
-    //End method get user logged
 
 }

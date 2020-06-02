@@ -34,7 +34,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
+/**
+ * Fragment to display list registered users
+ * @author oriol
+ * @version 1.0
+ */
 public class ListUsers extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
 
     //--- Declarations of elements ---
@@ -47,7 +51,10 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
 
     //--- Configurations for inflate fragment ---
-
+    /**
+     * create instance for inflate fragment
+     * @return this fragment
+     */
     public static ListUsers newInstance(){
         return new ListUsers();
     }
@@ -59,7 +66,13 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     //--- End configurations for inflate fragment ---
 
-
+    /**
+     * initialize elements and call methods
+     * @param inflater
+     * @param container
+     * @param savedInstance
+     * @return view
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
 
         View view = inflater.inflate(R.layout.fragment_list_users, container, false);
@@ -90,7 +103,9 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     //--- METHODS ---
 
-    //Method for consult list users registered in Snapshot
+    /**
+     * Method for consult list users registered in Snapshot
+     */
     private void loadWebService() {
 
         String url = "http://uri200rk.alwaysdata.net/webService/consultar_lista_usuario.php";
@@ -100,8 +115,10 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     }
 
-
-
+    /**
+     * case of error consult users
+     * @param error
+     */
     @Override
     public void onErrorResponse(VolleyError error) {
 
@@ -110,6 +127,10 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     }
 
+    /**
+     * fill arraylist of users records, validate existence follow and searcher
+     * @param response
+     */
     @Override
     public void onResponse(JSONObject response) {
 
@@ -221,8 +242,12 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     // End method for consult list users registered in Snapshot
 
-
-    // Method for insert follow
+    /**
+     * Method for insert follow
+     * @param URL
+     * @param userFollowing
+     * @param userLogged
+     */
     private void insertFollow(String URL, final int userFollowing, final User userLogged){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -253,8 +278,12 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
 
     }
 
-    //---Method check existence follow---
-
+    /**
+     * Method check existence follow
+     * @param idUser
+     * @param following
+     * @return answer
+     */
     public String validateFollow(int idUser, int following){
         String parametros = "idUser="+idUser+"&following="+following;
         HttpURLConnection conection = null;
@@ -280,6 +309,11 @@ public class ListUsers extends Fragment implements Response.Listener<JSONObject>
         return respuesta.toString();
     }
 
+    /**
+     * Get answer validateFollow
+     * @param respuesta
+     * @return number of follows that exist
+     */
     public int objJASON(String respuesta){
         int res=0;
         try {

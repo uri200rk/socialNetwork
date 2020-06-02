@@ -42,11 +42,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
+/**
+ * Fragment of user profile view
+ * @author oriol
+ * @version 1.0
+ */
 public class Profile extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     //--- Declarations of elements ---
-
 
     EditText nick, fullName, mail;
     Button btnEditUser, btnSave, btnDelete;
@@ -63,9 +66,14 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
 
     //configurations for inflate fragment
+    /**
+     * create instance for inflate fragment
+     * @return this fragment
+     */
     public static Profile newInstance(){
         return new Profile();
     }
+    //--- End configurations for inflate fragment ---
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -73,9 +81,14 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
     }
 
-    //--- End configurations for inflate fragment ---
 
-
+    /**
+     * initialize elements and call methods
+     * @param inflater
+     * @param container
+     * @param savedInstance
+     * @return view
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
@@ -271,7 +284,11 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
     //--- Methods ---
 
-    //update user
+    /**
+     * Method for update user data
+     * @param URL
+     * @param user
+     */
     private void updateUser(String URL, final User user){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -304,7 +321,11 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
     }
 
-    //delete user
+    /**
+     * Method for delete user
+     * @param URL
+     * @param user
+     */
     private void deleteUser(String URL, final User user){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -334,7 +355,9 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
     }
 
-    //show own posts
+    /**
+     * Method for show own posts
+     */
     private void loadPublications() {
         mostrarList = false;
 
@@ -344,8 +367,10 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
         request.add(jsonObjectRequest);
     }
 
-    //show own followers
 
+    /**
+     * Method for show own followers
+     */
     private void loadFollowers() {
         mostrarList = true;
 
@@ -356,7 +381,10 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
     }
 
 
-
+    /**
+     * case of error consult own post or own followers
+     * @param error
+     */
     @Override
     public void onErrorResponse(VolleyError error) {
 
@@ -365,6 +393,10 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
 
     }
 
+    /**
+     * fill arraylist of users records or follow records
+     * @param response
+     */
     @Override
     public void onResponse(JSONObject response) {
         //get user logged
@@ -437,8 +469,11 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
         }
     }
 
-
-    //Method verifies existence of edtUser
+    /**
+     * Method verifies existence of edtUser
+     * @param nick
+     * @return
+     */
     public String validateUser(String nick){
         String parametros = "nick="+nick;
         HttpURLConnection conection = null;
@@ -464,6 +499,11 @@ public class Profile extends Fragment implements Response.Listener<JSONObject>, 
         return respuesta.toString();
     }
 
+    /**
+     * Get answer validateUser
+     * @param respuesta
+     * @return number of follows that exist
+     */
     public int objJASON(String respuesta){
         int res=0;
         try {

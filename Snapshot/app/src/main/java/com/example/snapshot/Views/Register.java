@@ -17,9 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.snapshot.R;
-
 import org.json.JSONArray;
-
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -28,6 +26,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+/**
+ * Fragment to register new user
+ * @author oriol
+ * @version 1.0
+ */
 public class Register extends AppCompatActivity {
 
     //--- Declarations of elements ---
@@ -49,6 +52,10 @@ public class Register extends AppCompatActivity {
                     "$");
 
 
+    /**
+     * initialize elements
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,9 +116,12 @@ public class Register extends AppCompatActivity {
 
     }
 
-    //--- Error checks ---
+    //--- Error control ---
 
-
+    /**
+     * Method for mail error control
+     * @return
+     */
     private boolean validateEmail() {
         String emailInput = mail.getText().toString().trim();
 
@@ -127,12 +137,16 @@ public class Register extends AppCompatActivity {
         }
     }
 
-    // --- End error checks ---
+    // --- End error control ---
 
 
     //--- Methods ---
 
-    //Method check dates
+    /**
+     * Method check dates
+     * @param nick
+     * @return answer
+     */
     public String validateUser(String nick){
         String parametros = "nick="+nick;
         HttpURLConnection conection = null;
@@ -158,6 +172,11 @@ public class Register extends AppCompatActivity {
         return respuesta.toString();
     }
 
+    /**
+     * Get answer validateUser
+     * @param respuesta
+     * @return number of users that exist
+     */
     public int objJASON(String respuesta){
         int res=0;
         try {
@@ -171,6 +190,10 @@ public class Register extends AppCompatActivity {
         return res;
     }
 
+    /**
+     * Method for insert new user
+     * @param URL
+     */
     private void ejecutarSerivcio(String URL){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

@@ -36,6 +36,11 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+/**
+ * Activity for upload image
+ * @author oriol
+ * @version 1.0
+ */
 public class UploadMedia extends AppCompatActivity {
 
     //--- Declarations of elements ---
@@ -58,22 +63,10 @@ public class UploadMedia extends AppCompatActivity {
     String KEY_IMAGE = "foto";
     String KEY_NOMBRE = "nombre";
 
-
-    //--- Configurations for inflate fragment ---
-
-    public static UploadMedia newInstance(){
-        return new UploadMedia();
-    }
-
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
-        View view = inflater.inflate(R.layout.fragment_list_publication, container, false);
-
-        return view;
-    }
-
-    //--- End configurations for inflate fragment ---
-
+    /**
+     * initialize elements
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +124,10 @@ public class UploadMedia extends AppCompatActivity {
 
     //--- Methods ---
 
-    //go activity home
+    /**
+     * Method for go activity home
+     * @param milisegundos
+     */
     public void goHome (int milisegundos) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -143,7 +139,11 @@ public class UploadMedia extends AppCompatActivity {
         }, milisegundos);
     }
 
-    //converts the image to a string
+    /**
+     * Converts the image to a string
+     * @param bmp
+     * @return encoded image
+     */
     public String getStringImagen(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100,baos);
@@ -153,7 +153,9 @@ public class UploadMedia extends AppCompatActivity {
         return encodedImagen;
     }
 
-    //upload image on webServer
+    /**
+     * upload image on webServer
+     */
     public void uploadImagen() {
         final ProgressDialog cargando = ProgressDialog.show(this,getString(R.string.upload),getString(R.string.esperePorfavor));
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL, new Response.Listener<String>() {
@@ -187,7 +189,9 @@ public class UploadMedia extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    //para seleccionar una imagen
+    /**
+     * Method for select image from gallery
+     */
     private void showFileChooser(){
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -211,7 +215,11 @@ public class UploadMedia extends AppCompatActivity {
         }
     }
 
-    //execute sql sentence
+    /**
+     * execute sql sentence
+     * @param URL
+     * @param user
+     */
     private void ejecutarSerivcio(String URL, final User user){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {

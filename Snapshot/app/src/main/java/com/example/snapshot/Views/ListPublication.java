@@ -23,7 +23,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-
+/**
+ * Fragment to display publications
+ * @author oriol
+ * @version 1.0
+ */
 public class ListPublication extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     // --- Declarations of elements ---
@@ -35,16 +39,28 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
 
     //--- Configurations for inflate fragment ---
 
+    /**
+     * create instance for inflate fragment
+     * @return this fragment
+     */
     public static ListPublication newInstance(){
         return new ListPublication();
     }
+
+    //--- End configuration for inflate fragment ---
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    //--- End configuration for inflate fragment ---
 
+    /**
+     * initialize elements and call methods
+     * @param inflater
+     * @param container
+     * @param savedInstance
+     * @return view
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_list_publication, container, false);
         //--- initialize elements ---
@@ -70,7 +86,9 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
 
     //--- METHODS ---
 
-    //method for consult publications
+    /**
+     * Method for consult publications
+     */
     private void loadWebService() {
 
         String url = "http://uri200rk.alwaysdata.net/webService/consulta_publicaciones.php";
@@ -79,6 +97,10 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
         request.add(jsonObjectRequest);
     }
 
+    /**
+     * case of error consult publications
+     * @param error
+     */
     @Override
     public void onErrorResponse(VolleyError error) {
 
@@ -87,6 +109,10 @@ public class ListPublication extends Fragment implements Response.Listener<JSONO
 
     }
 
+    /**
+     * fill arraylist of publications records
+     * @param response
+     */
     @Override
     public void onResponse(JSONObject response) {
 

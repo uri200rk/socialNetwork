@@ -13,6 +13,11 @@ import com.example.snapshot.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The adapter of users
+ * @author oriol
+ * @version 1.0
+ */
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder> implements View.OnClickListener, Filterable {
 
     //--- Declarations of elements ---
@@ -20,12 +25,21 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
     List<User> listUsersFull;
     private View.OnClickListener listener;
 
-    //adapter constructor
+    /**
+     * adapter constructor
+     * @param listUsers
+     */
     public UsersAdapter(List<User> listUsers){
         this.listUsers = listUsers;
         listUsersFull = new ArrayList<>(listUsers);
     }
 
+    /**
+     * create view holder
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public UsersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,6 +54,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
         return new UsersHolder(vista);
     }
 
+    /**
+     * Set text nickUser by arrayList registry
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull UsersHolder holder, int position) {
 
@@ -47,16 +66,27 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
 
     }
 
+    /**
+     * Get size arrayList
+     * @return
+     */
     @Override
     public int getItemCount() {
         return listUsers.size();
     }
 
-
+    /**
+     * Declare listener
+     * @param listener
+     */
     public void setOnclickListener(View.OnClickListener listener){
         this.listener = listener;
     }
 
+    /**
+     * action click
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -66,7 +96,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
 
     }
 
-    //--- Declarations of elements holder ---
+    /**
+     * Declarations of elements holder
+     */
     public class UsersHolder extends RecyclerView.ViewHolder {
 
         TextView nickUser;
@@ -81,13 +113,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersHolder>
 
     //--- Methods ---
 
-    //filter
+    /**
+     * filter
+     * @return
+     */
     @Override
     public Filter getFilter() {
         return filteredList;
     }
 
-    //filter in recyclerView by users
+    /**
+     * filter in recyclerView by users
+     */
     private Filter filteredList = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {

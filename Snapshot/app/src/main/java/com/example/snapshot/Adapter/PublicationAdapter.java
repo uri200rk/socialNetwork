@@ -25,6 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The adapter of pblication
+ * @author oriol
+ * @version 1.0
+ */
 public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.PublicationHolder> implements View.OnClickListener {
 
     //--- Declarations of elements ---
@@ -33,7 +38,11 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
     RequestQueue request;
     Context context;
 
-    //adapter constructor
+    /**
+     * Adapter constructor
+     * @param listPublication
+     * @param context
+     */
     public PublicationAdapter(List<Publication> listPublication, Context context){
         this.listPublication = listPublication;
         this.context = context;
@@ -45,7 +54,9 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
     }
 
-    //--- Declarations of elements holder ---
+    /**
+     * Declarations of elements holder
+     */
     public class PublicationHolder extends RecyclerView.ViewHolder {
 
         TextView nickUser, title, description, likes;
@@ -65,7 +76,12 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         }
     }
 
-
+    /**
+     * create view holder
+     * @param parent
+     * @param viewType
+     * @return publication holder
+     */
     @NonNull
     @Override
     public PublicationAdapter.PublicationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -81,6 +97,11 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
     }
 
 
+    /**
+     * Update corresponding texts
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull PublicationAdapter.PublicationHolder holder, final int position) {
         holder.nickUser.setText(String.valueOf(listPublication.get(position).getNick()));
@@ -115,7 +136,11 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
     //--- Methods ---
 
-    //method load image from web server
+    /**
+     * method load image from web server
+     * @param idMedia
+     * @param holder
+     */
     private void loadImageWebService(String idMedia, final PublicationHolder holder) {
 
         String urlImage = "http://uri200rk.alwaysdata.net/webService/upload/" + idMedia + ".png";
@@ -140,13 +165,22 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
     }
 
+    /**
+     * Get size arrayList
+     * @return
+     */
     @Override
     public int getItemCount() {
         return listPublication.size();
     }
 
 
-    //add likes
+    /**
+     * add likes
+     * @param URL
+     * @param idPublication
+     * @param position
+     */
     private void addLikes(String URL, final List<Publication> idPublication, final int position){
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
